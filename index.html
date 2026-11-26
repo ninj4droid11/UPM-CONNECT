@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UPM Connect | Campus Assistant</title>
+<style>
+:root{--navy:#174d73;--blue:#2876a7;--gold:#ffdf7e;--red:#a91d4b;--bg:#f3f6f9;--ink:#17212b;--muted:#667585}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+.app{max-width:460px;min-height:100vh;margin:auto;background:#fff;box-shadow:0 0 25px #13283b12;padding-bottom:82px}
+header{background:linear-gradient(140deg,#174d73,#2876a7);color:white;padding:23px 20px 20px;border-radius:0 0 24px 24px}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;letter-spacing:2px;font-size:13px}.lang{border:1px solid #ffffff88;background:#ffffff1c;color:#fff;border-radius:9px;padding:8px;font-weight:bold}
+h1{font-size:26px;margin:17px 0 5px}.tag{font-size:13px;opacity:.9}
+main{padding:18px}.page{display:none}.page.active{display:block}h2{font-size:21px;margin:5px 0}.sub{font-size:13px;color:var(--muted);line-height:1.45;margin:5px 0 15px}
+.card{border:1px solid #e7edf2;border-radius:16px;padding:14px;margin:11px 0;box-shadow:0 4px 14px #10243a08}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}.tile{border:0;border-radius:15px;padding:15px;text-align:left;background:#fff1c6;font-weight:800;color:#49380b;cursor:pointer}.tile:nth-child(2),.tile:nth-child(3){background:#e7f2fa;color:#174d73}.tile:nth-child(4){background:#f8e8ee;color:#8c173e}.tile span{display:block;font-size:25px;margin-bottom:7px}.tile small{display:block;font-weight:500;margin-top:4px}
+.search{display:flex;gap:7px;background:#f0f4f7;padding:10px;border-radius:12px;margin:14px 0}.search input{border:0;background:transparent;outline:0;flex:1;min-width:0}
+input,textarea,select{font:inherit}.btn{border:0;background:var(--blue);color:white;padding:10px 13px;border-radius:10px;font-weight:750;cursor:pointer}.light{background:#eaf2f8;color:var(--navy);border:0;border-radius:9px;padding:8px 10px;font-weight:700;cursor:pointer}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}.pill{font-size:10px;background:#e9f3fa;color:#1b5c85;padding:5px 8px;border-radius:30px;font-weight:800}
+.place{display:flex;align-items:center;gap:10px}.icon{width:39px;height:39px;border-radius:12px;background:#e8f2f9;display:grid;place-items:center;font-size:20px}.place-info{flex:1}.place-info b{font-size:14px}.place-info small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.notice{border-left:4px solid var(--gold)}.notice p{font-size:13px;line-height:1.5;margin:8px 0}.meta{font-size:11px;color:var(--muted)}
+textarea{width:100%;border:1px solid #dce4eb;border-radius:12px;padding:12px;min-height:75px;resize:vertical}
+.messages{height:330px;overflow:auto;background:#f4f7fa;border-radius:14px;padding:10px}.msg{max-width:85%;background:#fff;padding:9px 11px;border-radius:13px;margin:8px 0;box-shadow:0 2px 5px #00000008}.msg.mine{margin-left:auto;background:#dceefa}.msg small{display:block;color:#718090;font-size:10px;margin-top:4px}.chat-send{display:flex;gap:7px;margin-top:9px}.chat-send input{min-width:0;flex:1;border:1px solid #dce4eb;border-radius:11px;padding:11px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(460px,100%);height:72px;background:#fff;border-top:1px solid #e6ebf0;display:flex;justify-content:space-around;align-items:center;z-index:5}.bottom button{border:0;background:none;color:#7c8995;font-size:10px;font-weight:700;display:grid;justify-items:center;gap:4px}.bottom button strong{font-size:20px}.bottom button.active{color:var(--blue)}
+.toast{position:fixed;bottom:83px;left:50%;transform:translateX(-50%);background:#17212b;color:#fff;padding:10px 14px;border-radius:10px;font-size:12px;opacity:0;transition:.2s;z-index:9}.toast.show{opacity:1}
+.disclaimer{font-size:11px;color:#788591;line-height:1.4}.empty{font-size:13px;color:var(--muted);padding:12px;text-align:center}
+@media(min-width:600px){body{padding:18px 0}.app{border-radius:24px;overflow:hidden}.bottom{bottom:18px;border-radius:0 0 24px 24px}}
+
+/* Responsive layout: full-screen portrait on phones, wide landscape on computers */
+html { min-height: 100%; }
+body { min-height: 100vh; }
+.app { width: 100%; }
+
+/* Phones: edge-to-edge, portrait-first app layout */
+@media (max-width: 599px) {
+  html, body { width: 100%; min-height: 100%; }
+  body { padding: 0 !important; }
+  .app {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding-bottom: calc(78px + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+  }
+  header {
+    border-radius: 0 0 22px 22px;
+    padding: max(18px, env(safe-area-inset-top)) 18px 18px;
+  }
+  main { padding: 16px 15px 24px; }
+  .bottom {
+    width: 100%;
+    max-width: none;
+    left: 0;
+    transform: none;
+    bottom: 0;
+    height: calc(66px + env(safe-area-inset-bottom));
+    padding: 0 5px env(safe-area-inset-bottom);
+    border-radius: 0;
+  }
+  .bottom button { min-width: 0; flex: 1; font-size: 9px; }
+  .messages { height: min(42vh, 360px); }
+  .toast { bottom: calc(76px + env(safe-area-inset-bottom)); }
+}
+
+/* Desktop / laptop: landscape workspace */
+@media (min-width: 900px) and (orientation: landscape) {
+  body {
+    padding: 0;
+    background: #eaf0f5;
+  }
+  .app {
+    max-width: 1440px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 0 0 88px;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: 0 0 35px #13283b14;
+  }
+  header {
+    min-height: 190px;
+    padding: 28px clamp(32px, 5vw, 76px) 30px;
+    border-radius: 0 0 28px 28px;
+  }
+  header h1 { font-size: clamp(30px, 3vw, 44px); margin-top: 22px; }
+  header .tag { font-size: 15px; }
+  main {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 30px 34px 40px;
+  }
+  .page h2 { font-size: 28px; }
+  .sub { font-size: 14px; }
+  #home .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .tile { min-height: 150px; padding: 22px; }
+  .tile span { font-size: 32px; }
+  #homePlaces, #homeNews, #places, #news, #posts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .card { margin: 0; padding: 18px; }
+  .bottom {
+    width: min(100%, 1440px);
+    height: 76px;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -5px 24px #13283b10;
+  }
+  .bottom button { font-size: 12px; min-width: 100px; }
+  .bottom button strong { font-size: 23px; }
+  .messages { height: 390px; }
+  .toast { bottom: 88px; }
+}
+
+/* Medium tablets: use the available width without forcing desktop density */
+@media (min-width: 600px) and (max-width: 899px) {
+  body { padding: 0; }
+  .app { max-width: 760px; min-height: 100vh; border-radius: 0; }
+  main { padding: 24px; }
+  .bottom { width: min(760px, 100%); bottom: 0; }
+}
+
+
+.login-gate{position:fixed;inset:0;z-index:1000;background:linear-gradient(145deg,#123e60,#2876a7);display:flex;align-items:center;justify-content:center;padding:22px}
+.login-card{width:min(430px,100%);background:#fff;border-radius:22px;padding:28px 24px;box-shadow:0 20px 60px #061d3155}
+.login-logo{text-align:center;font-size:14px;font-weight:900;letter-spacing:2px;color:#174d73}
+.login-card h2{text-align:center;color:#173d59;margin:18px 0 7px;font-size:25px}
+.login-card .login-sub{text-align:center;color:#667585;font-size:13px;line-height:1.5;margin:0 0 22px}
+.login-card label{display:block;font-size:13px;font-weight:700;color:#34495a;margin:13px 0 6px}
+.login-card input{width:100%;padding:13px;border:1px solid #d7e0e8;border-radius:11px;outline-color:#2876a7}
+.login-card .btn{width:100%;padding:13px;margin-top:18px}
+.login-warning{font-size:11px;line-height:1.5;color:#7a8791;margin-top:14px;text-align:center}
+.login-error{color:#b42345;font-size:12px;min-height:16px;margin-top:8px}
+body.locked{overflow:hidden}body.locked .app{visibility:hidden}
+</style></head>
+<body class="locked">
+<div class="login-gate" id="loginGate"><div class="login-card">
+<div class="login-logo">🎓 UPM CONNECT</div><h2>Student Login</h2>
+<p class="login-sub">Please enter your name and UPM student ID to continue.<br>请先输入姓名和学号，登录后才能使用校园服务。</p>
+<form id="loginForm" onsubmit="loginStudent(event)">
+<label for="loginName">Full Name / 姓名</label><input id="loginName" autocomplete="name" maxlength="80" required placeholder="Enter your full name">
+<label for="loginId">UPM Student ID / 学号</label><input id="loginId" autocomplete="off" maxlength="30" required placeholder="Enter your student ID">
+<div class="login-error" id="loginError"></div><button class="btn" type="submit">Login / 登录</button>
+</form><p class="login-warning">Prototype access gate only. To block non-UPM users securely, connect this form to an authorised UPM student database or verified university identity service.</p>
+</div></div>
+<div class="app">
+<header><div class="top"><div class="brand">UPM CONNECT</div><select class="lang" id="language" aria-label="Language" onchange="setLanguage(this.value)"><option value="en">EN</option><option value="zh">中文</option><option value="ms">BM</option></select></div><h1 data-i="hero">Your campus, connected.</h1><div class="tag" data-i="tagline">Connect. Communicate. Belong.</div></header>
+<main>
+<section class="page active" id="home"><h2 data-i="hello">Hello, student 👋</h2><p class="sub" data-i="homeSub">What would you like to do today?</p>
+<div class="grid">
+<button class="tile" onclick="showPage('map')"><span>📍</span><i data-i="campusMap">Campus Map</i><small data-i="findPlaces">Find places & facilities</small></button>
+<button class="tile" onclick="showPage('chat')"><span>💬</span><i data-i="liveChat">Live Chat</i><small data-i="talkStudents">Talk with other students</small></button>
+<button class="tile" onclick="showPage('community')"><span>👥</span><i data-i="community">Community</i><small data-i="askShare">Ask questions and share</small></button>
+<button class="tile" onclick="showPage('updates')"><span>📢</span><i data-i="announcements">Announcements</i><small data-i="campusNews">Campus notices</small></button>
+</div>
+<h3 data-i="quickPlaces">Popular campus locations</h3><div id="homePlaces"></div>
+<h3 data-i="latestNews">Latest updates</h3><div id="homeNews"></div>
+</section>
+
+<section class="page" id="map"><h2 data-i="campusMap">Campus Map</h2><p class="sub" data-i="mapSub">Search verified campus places and open directions in your map app.</p>
+<div class="search">⌕ <input id="placeQuery" placeholder="Search library, clinic, faculty..." oninput="renderPlaces()"></div>
+<div id="places"></div><p class="disclaimer" data-i="mapNote">Locations and coordinates are based on UPM webpages where available. Use the map link for live directions; indoor room-level navigation is not included yet.</p>
+</section>
+
+<section class="page" id="chat"><h2 data-i="liveChat">Live Chat</h2><p class="sub" data-i="chatSub">Live shared student chat across devices (Supabase setup required).</p>
+<div class="row"><b data-i="generalRoom"># General Student Chat</b><span class="pill" id="chatStatus">DEMO MODE</span></div>
+<div class="messages" id="messages"></div>
+<div class="chat-send"><input id="chatInput" data-placeholder="typeMessage" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendMessage()"><button class="btn" onclick="sendMessage()" data-i="send">Send</button></div>
+<p class="disclaimer" data-i="chatNote">Connect your Supabase project to enable messages across different phones and computers. Do not publish the anon key with unrestricted database policies; configure student authentication before production.</p>
+</section>
+
+<section class="page" id="community"><h2 data-i="community">Community Hub</h2><p class="sub" data-i="communitySub">Ask campus questions and share student tips.</p>
+<div class="card"><textarea id="postInput" data-placeholder="writePost" placeholder="Write a question or helpful tip..."></textarea><div class="row" style="margin-top:8px"><select id="category"><option>Campus Help</option><option>Meet Friends</option><option>Student Life</option></select><button class="btn" onclick="publishPost()" data-i="publish">Publish</button></div></div><div id="posts"></div>
+</section>
+
+<section class="page" id="updates"><h2 data-i="announcements">Announcements</h2><p class="sub" data-i="updatesSub">Campus information and student notices.</p><div id="news"></div><p class="disclaimer" data-i="officialNote">Demo notices only. Official university announcements should be connected to an authorised UPM source.</p></section>
+
+<section class="page" id="profile"><h2 data-i="profile">Profile</h2><div class="card" style="text-align:center;padding:25px"><div style="font-size:44px">🎓</div><b id="profileStudentName">UPM Student</b><p class="sub" id="profileStudentId"></p><button class="light" onclick="logoutStudent()">Log out / 登出</button><p class="sub" data-i="profileNote">Your name and student ID are used for this prototype session.</p></div></section>
+</main>
+<nav class="bottom">
+<button class="active" data-page="home" onclick="showPage('home')"><strong>⌂</strong><span data-i="home">Home</span></button>
+<button data-page="map" onclick="showPage('map')"><strong>📍</strong><span data-i="mapNav">Map</span></button>
+<button data-page="chat" onclick="showPage('chat')"><strong>💬</strong><span data-i="chatNav">Chat</span></button>
+<button data-page="community" onclick="showPage('community')"><strong>👥</strong><span data-i="communityNav">Community</span></button>
+<button data-page="profile" onclick="showPage('profile')"><strong>☺</strong><span data-i="profile">Profile</span></button>
+</nav><div class="toast" id="toast"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const words={
+en:{hero:"Your campus, connected.",tagline:"Connect. Communicate. Belong.",hello:"Hello, student 👋",homeSub:"What would you like to do today?",campusMap:"Campus Map",findPlaces:"Find places & facilities",liveChat:"Live Chat",talkStudents:"Talk with other students",community:"Community",askShare:"Ask questions and share",announcements:"Announcements",campusNews:"Campus notices",quickPlaces:"Popular campus locations",latestNews:"Latest updates",mapSub:"Search verified campus places and open directions in your map app.",mapNote:"Locations and coordinates are based on UPM webpages where available. Use the map link for live directions; indoor room-level navigation is not included yet.",chatSub:"Live shared student chat across devices (Supabase setup required).",generalRoom:"# General Student Chat",typeMessage:"Type a message...",send:"Send",chatNote:"Connect your Supabase project to enable messages across different phones and computers. Do not publish the anon key with unrestricted database policies; configure student authentication before production.",communitySub:"Ask campus questions and share student tips.",writePost:"Write a question or helpful tip...",publish:"Publish",updatesSub:"Campus information and student notices.",officialNote:"Demo notices only. Official university announcements should be connected to an authorised UPM source.",profile:"Profile",demoStudent:"UPM Student (Demo)",profileNote:"Student sign-in and verified UPM email can be added when the backend is connected.",home:"Home",mapNav:"Map",chatNav:"Chat",communityNav:"Community",placeOpen:"Open directions",sent:"Message added to demo chat.",posted:"Your post has been published.",empty:"No results found.",chatYou:"You",notice1:"Welcome to UPM Connect",notice1body:"This prototype combines campus place discovery, student chat and community discussions.",notice2:"Use official campus information",notice2body:"Check UPM's official pages for the latest location and facility information."},
+zh:{hero:"连接你的校园生活。",tagline:"连接 · 沟通 · 融入校园",hello:"你好，同学 👋",homeSub:"今天你想使用什么功能？",campusMap:"校园地图",findPlaces:"查找地点和设施",liveChat:"实时聊天",talkStudents:"与其他学生交流",community:"学生社区",askShare:"提问和分享",announcements:"校园公告",campusNews:"校园通知",quickPlaces:"常用校园地点",latestNews:"最新消息",mapSub:"搜索已核实的校园地点，并在地图应用中打开导航。",mapNote:"地点和坐标来自 UPM 官方网页（如有提供）。点击地图链接获取实时路线；暂不包含室内教室级导航。",chatSub:"原型版共享聊天室界面。",generalRoom:"# 学生综合聊天室",typeMessage:"输入消息……",send:"发送",chatNote:"完成 Supabase 设置后，不同手机和电脑的用户即可实时收发消息。正式上线前请加入学生身份验证及安全数据库规则。",communitySub:"提出校园问题并分享学生生活贴士。",writePost:"写下问题或实用贴士……",publish:"发布",updatesSub:"校园信息和学生通知。",officialNote:"这里只是演示公告。正式公告应连接 UPM 授权信息来源。",profile:"个人资料",demoStudent:"UPM 学生（演示账号）",profileNote:"连接后端后可加入学生登录和 UPM 邮箱验证。",home:"首页",mapNav:"地图",chatNav:"聊天",communityNav:"社区",placeOpen:"打开导航",sent:"消息已加入演示聊天室。",posted:"帖子已发布。",empty:"没有找到相关地点。",chatYou:"你",notice1:"欢迎使用 UPM Connect",notice1body:"此原型整合校园地点查询、学生聊天和社区讨论。",notice2:"使用官方校园信息",notice2body:"最新地点和设施信息请以 UPM 官方网页为准。"},
+ms:{hero:"Kampus anda, lebih terhubung.",tagline:"Berhubung · Berkomunikasi · Bersama",hello:"Hai, pelajar 👋",homeSub:"Apakah yang ingin anda lakukan hari ini?",campusMap:"Peta Kampus",findPlaces:"Cari lokasi dan kemudahan",liveChat:"Sembang Langsung",talkStudents:"Berbual dengan pelajar lain",community:"Komuniti",askShare:"Tanya dan kongsi",announcements:"Pengumuman",campusNews:"Notis kampus",quickPlaces:"Lokasi kampus popular",latestNews:"Kemas kini terkini",mapSub:"Cari lokasi kampus yang disahkan dan buka arah dalam aplikasi peta.",mapNote:"Lokasi dan koordinat berdasarkan laman web rasmi UPM apabila tersedia. Gunakan pautan peta untuk arah langsung; navigasi bilik dalaman belum disediakan.",chatSub:"Antara muka bilik sembang untuk prototaip.",generalRoom:"# Sembang Umum Pelajar",typeMessage:"Taip mesej...",send:"Hantar",chatNote:"Sediakan projek Supabase untuk membolehkan mesej masa nyata antara telefon dan komputer. Tambah pengesahan pelajar dan polisi pangkalan data yang selamat sebelum pelancaran.",communitySub:"Tanya soalan kampus dan kongsi tip pelajar.",writePost:"Tulis soalan atau tip berguna...",publish:"Terbitkan",updatesSub:"Maklumat kampus dan notis pelajar.",officialNote:"Notis demonstrasi sahaja. Pengumuman rasmi perlu disambungkan kepada sumber UPM yang dibenarkan.",profile:"Profil",demoStudent:"Pelajar UPM (Demo)",profileNote:"Log masuk pelajar dan pengesahan e-mel UPM boleh ditambah selepas backend disambungkan.",home:"Utama",mapNav:"Peta",chatNav:"Sembang",communityNav:"Komuniti",placeOpen:"Buka arah",sent:"Mesej ditambah ke sembang demo.",posted:"Hantaran anda telah diterbitkan.",empty:"Tiada hasil ditemui.",chatYou:"Anda",notice1:"Selamat datang ke UPM Connect",notice1body:"Prototaip ini menggabungkan carian lokasi kampus, sembang pelajar dan perbincangan komuniti.",notice2:"Gunakan maklumat kampus rasmi",notice2body:"Rujuk laman rasmi UPM untuk maklumat lokasi dan kemudahan terkini."}
+};
+let lang="en";function tr(k){return words[lang][k]||words.en[k]||k}
+function setLanguage(v){lang=v;document.documentElement.lang=v;document.querySelectorAll("[data-i]").forEach(el=>el.textContent=tr(el.dataset.i));document.querySelectorAll("[data-placeholder]").forEach(el=>el.placeholder=tr(el.dataset.placeholder));renderPlaces();renderNews();renderPosts();renderMessages()}
+const places=[
+// Coordinates published by UPM college location directory where available.
+{name:"University Health Centre",type:"Clinic / Student health",lat:2.9915077,lon:101.7084968,source:"UPM official location directory"},
+{name:"Library UPM",type:"Library",lat:3.0024201,lon:101.705879,source:"UPM official location directory"},
+{name:"UPM Mosque",type:"Religious facility",lat:3.0020558,lon:101.7170262,source:"UPM official location directory"},
+{name:"UPM Stadium",type:"Sports facility",lat:2.9863488,lon:101.7252016,source:"UPM official location directory"},
+{name:"College Sultan Alaeddin Suleiman Shah (KOSASS)",type:"Residential college",lat:2.9941809,lon:101.7046237,source:"UPM official location directory"},
+{name:"UPM Administration Building",type:"Administration",lat:2.9993344,lon:101.7079067,source:"UPM official location directory"},
+{name:"UPM Security Division",type:"Security",lat:2.9983594,lon:101.7106318,source:"UPM official location directory"},
+{name:"UPM Alumni Centre",type:"Alumni / administration",lat:3.0010058,lon:101.704098,source:"UPM official location directory"},
+{name:"University Agriculture Park",type:"Agriculture / recreation",lat:2.986531,lon:101.7083144,source:"UPM official location directory"},
+{name:"UPM Sports Centre",type:"Sports facility",lat:2.9867774,lon:101.7244881,source:"UPM official location directory"},
+{name:"UPM Islamic Centre",type:"Religious facility",lat:3.0028755,lon:101.7174876,source:"UPM official location directory"},
+// Additional campus destinations: Google Maps search links are used rather than guessed coordinates.
+...[
+["Faculty of Agriculture","Faculty"],["Faculty of Engineering","Faculty"],["Faculty of Science","Faculty"],["Faculty of Forestry","Faculty"],["Faculty of Veterinary Medicine and Animal Science","Faculty / Veterinary"],["Faculty of Medicine and Health Sciences","Faculty / Hospital"],["Faculty of Economics and Management","Faculty"],["Faculty of Educational Studies","Faculty"],["Faculty of Human Ecology","Faculty"],["Faculty of Computer Science and Information Technology","Faculty"],["Faculty of Modern Languages and Communication","Faculty"],["Faculty of Design and Architecture","Faculty"],["Faculty of Biotechnology and Biomolecular Sciences","Faculty"],["Faculty of Food Science and Technology","Faculty"],["Faculty of Environmental Studies","Faculty"],["Institute of Bioscience","Institute"],["Institute of Tropical Agriculture and Food Security","Institute"],["Institute of Advanced Technology","Institute"],["Institute of Mathematical Research","Institute"],["Institute of Gerontology","Institute"],["Institute of Plantation Studies","Institute"],["Institute of Tropical Forestry and Forest Products","Institute"],["School of Graduate Studies","Academic office"],["Putra International Centre (i-PUTRA)","International student services"],["Dewan Besar / Main Hall","Event venue"],["Student Centre","Student facility"],["Academic Complex A","Lecture / academic"],["Academic Complex E","Lecture / academic"],["Dewan Kuliah Akademik Pusat (DKAP)","Lecture hall"],["Dewan Kuliah Putra","Lecture hall"],["Dewan Kuliah Kabin","Lecture hall"],["Pusat Kesihatan Universiti","Clinic"],["UPM Swimming Complex","Sports facility"],["UPM Gymnasium","Sports facility"],["Bukit Ekspo UPM","Recreation"],["Padang Kawad","Sports / event field"],["Anjung PUTRA / Gate 1","Campus entrance"],["Gate 2 UPM","Campus entrance"],["Gate 3 UPM","Campus entrance"],["Gate 4 UPM","Campus entrance"],["Gate 5 UPM","Campus entrance"],["Gate 6 UPM","Campus entrance"],["Petronas UPM","Petrol station"],["UPM Bus Centre","Transport"],["UPM Book Store","Shop"],["UPM Souvenir Shop","Shop"],["CIMB Bank UPM","Banking"],["UPM Veterinary Clinic","Veterinary clinic"],["UPM Main Administration Building","Administration"]
+].map(([name,type])=>({name,type,search:true,source:"UPM campus maps / destination search"}))
+];
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll(".bottom button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"})}
+function notify(s){let t=document.getElementById("toast");t.textContent=s;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2100)}
+function mapUrl(p){return p.search?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name+" UPM Serdang")}`:`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lon}`}
+function renderPlaces(){let q=(document.getElementById("placeQuery")?.value||"").toLowerCase();let found=places.filter(p=>(p.name+" "+p.type).toLowerCase().includes(q));let html=found.map(p=>`<div class="card place"><div class="icon">📍</div><div class="place-info"><b>${p.name}</b><small>${p.type}${p.lat?` · ${p.lat}, ${p.lon}`:""}</small><small>${p.source}${p.search?" · Map search (pin may need confirmation)":" · Published coordinates"}</small></div><a class="light" target="_blank" rel="noopener" href="${mapUrl(p)}">${tr("placeOpen")}</a></div>`).join("")||`<div class="empty">${tr("empty")}</div>`;let el=document.getElementById("places");if(el)el.innerHTML=html;let home=document.getElementById("homePlaces");if(home)home.innerHTML=found.slice(0,3).map(p=>`<div class="card place"><div class="icon">📍</div><div class="place-info"><b>${p.name}</b><small>${p.type}</small></div><a class="light" target="_blank" href="${mapUrl(p)}">↗</a></div>`).join("")}
+const news=[{titleKey:"notice1",bodyKey:"notice1body"},{titleKey:"notice2",bodyKey:"notice2body"}];
+function renderNews(){let html=news.map(n=>`<div class="card notice"><b>${tr(n.titleKey)}</b><p>${tr(n.bodyKey)}</p><span class="meta">UPM Connect · Prototype</span></div>`).join("");document.getElementById("news").innerHTML=html;document.getElementById("homeNews").innerHTML=html}
+let posts=[{name:"New student",text:"Can anyone share tips for finding lecture halls on campus?",cat:"Campus Help"}];
+function renderPosts(){document.getElementById("posts").innerHTML=posts.map(p=>`<div class="card"><div class="row"><b>${p.name}</b><span class="pill">${p.cat}</span></div><p style="font-size:13px;line-height:1.5">${escapeText(p.text)}</p></div>`).join("")}
+function escapeText(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function publishPost(){let el=document.getElementById("postInput"),v=el.value.trim();if(!v)return notify("Write a post first.");posts.unshift({name:"You",text:v,cat:document.getElementById("category").value});el.value="";renderPosts();notify(tr("posted"))}
+// Configure these two values after creating a Supabase project (see setup guide).
+const SUPABASE_URL="YOUR_SUPABASE_PROJECT_URL";
+const SUPABASE_ANON_KEY="YOUR_SUPABASE_ANON_KEY";
+const chatReady=!!(window.supabase&&SUPABASE_URL.startsWith("https://")&&SUPABASE_ANON_KEY!=="YOUR_SUPABASE_ANON_KEY");
+const db=chatReady?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+let messages=[];let studentName="";let studentId="";
+function loginStudent(event){event.preventDefault();const name=document.getElementById("loginName").value.trim();const sid=document.getElementById("loginId").value.trim();const err=document.getElementById("loginError");if(name.length<2||sid.length<3){err.textContent="Please enter a valid name and student ID. / 请填写有效姓名和学号。";return;}studentName=name;studentId=sid;sessionStorage.setItem("upm_student_name",name);sessionStorage.setItem("upm_student_id",sid);document.getElementById("loginGate").style.display="none";document.body.classList.remove("locked");document.getElementById("profileStudentName").textContent=name;document.getElementById("profileStudentId").textContent="Student ID: "+sid;}
+function logoutStudent(){sessionStorage.removeItem("upm_student_name");sessionStorage.removeItem("upm_student_id");studentName="";studentId="";document.getElementById("loginName").value="";document.getElementById("loginId").value="";document.getElementById("loginGate").style.display="flex";document.body.classList.add("locked");showPage("home");}
+function restoreStudentSession(){const n=sessionStorage.getItem("upm_student_name"),id=sessionStorage.getItem("upm_student_id");if(n&&id){studentName=n;studentId=id;document.getElementById("loginGate").style.display="none";document.body.classList.remove("locked");document.getElementById("profileStudentName").textContent=n;document.getElementById("profileStudentId").textContent="Student ID: "+id;}}
+restoreStudentSession();
+function renderMessages(){let box=document.getElementById("messages");if(!box)return;box.innerHTML=messages.map(m=>`<div class="msg ${m.name===studentName?"mine":""}">${escapeText(m.text)}<small>${escapeText(m.name)} · ${new Date(m.created_at||m.time||Date.now()).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small></div>`).join("");box.scrollTop=box.scrollHeight}
+async function loadChat(){if(!db)return;const {data,error}=await db.from("chat_messages").select("id,name,text,created_at").order("created_at",{ascending:true}).limit(100);if(error){document.getElementById("chatStatus").textContent="SETUP NEEDED";return}messages=data||[];renderMessages();document.getElementById("chatStatus").textContent="LIVE";db.channel("upm-general-chat").on("postgres_changes",{event:"INSERT",schema:"public",table:"chat_messages"},payload=>{if(!messages.some(m=>m.id===payload.new.id)){messages.push(payload.new);messages=messages.slice(-100);renderMessages()}}).subscribe();}
+async function sendMessage(){if(!studentName)return notify("Please log in first.");let input=document.getElementById("chatInput"),v=input.value.trim();if(!v)return;if(!db){notify("请先完成 Supabase 设置，聊天室才能跨手机实时收发。");return}const {error}=await db.from("chat_messages").insert({name:studentName,text:v});if(error){notify("发送失败：请检查 Supabase 设置。");return}input.value="";}
+if(chatReady)loadChat();else document.getElementById("chatStatus").textContent="SETUP NEEDED";
+
+setLanguage("en");renderPlaces();renderNews();renderPosts();renderMessages();
+</script></body></html>
